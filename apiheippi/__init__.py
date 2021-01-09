@@ -1,33 +1,28 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Resource, Api
-from flask_sqlalchemy.model import BindMetaMixin, Model
-from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 
-# Declaro esta metaclase de SQLAlchemy para poder darle nombres custom
-# a los usuarios. Esto es útil para hacer la 'herencia' de los tipos de
-# usuario desde el tipo básico. Ref. Doc. SQLAlchemy.
-# La herencia en SQLAlchemy no implica una herencia explícita de clase.
-# https://flask-sqlalchemy.palletsprojects.com/en/master/customizing/
-
-
-class NoNameMeta(BindMetaMixin, DeclarativeMeta):
-    pass
-
-# El objeto db será una instancia de SQLAlchemy con la metaclase custom.
-db = SQLAlchemy(model_class=declarative_base(
-    cls=Model, metaclass=NoNameMeta, name='Model'))
+from .resources.routes import initialize_routes
+from .database.db import initialize_db
 
 
 def create_app():
     app = Flask(__name__)
+
+    #Strings para conexión con la base de datos. Por ahora pruebas en SQLite
+    stringpostgresql = "postgresql+psycopg2://heippidbuser:abc123@localhost:5432/heippidb"
+    stringsqlite = "sqlite:///test.sqlite"
+
     app.config.update(
         DEBUG=True,
         SECRET_KEY='lorem*****',  #Esto hay que cambiarlo urgente. 
-        SQLALCHEMY_DATABASE_URI="sqlite:///test.sqlite",
+        SQLALCHEMY_DATABASE_URI=stringsqlite,
         SQLALCHEMY_TRACK_MODIFICATIONS=False
     )
 
-    db.init_app(app)
-
+    api = Api(app)
+    initialize_db(app)
+    initialize_routes(api)
     return app
+
+if __name__ == '__main__':
+    create_app().run(debug=True)
