@@ -1,5 +1,5 @@
 from apiheippi import db, create_app
-from apiheippi.models import User, HospitalUser, PatientUser
+from apiheippi.models import User, HospitalUser, PatientUser, MedicalService, ClinicHistory, ClinicHistoryRegisters
 app = create_app()
 db.create_all(app=app)
 
@@ -10,4 +10,3 @@ with app.app_context():
     db.session.add(admin)
     db.session.add(guest)
     db.session.commit()
-

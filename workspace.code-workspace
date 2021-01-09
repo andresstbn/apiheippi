@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+    ],
+    "settings": {
+        "files.exclude": {
+            ".gitignore": true,
+            "**/__pycache__": true,
+            "**/env": true
+        }
+    }
+}

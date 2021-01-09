@@ -29,6 +29,7 @@ class PatientUser(db.Model):
     __tablename__ = 'patient_user'
     id = Column(db.Integer, ForeignKey('user.id'), primary_key=True)
     birthdate = db.Column(db.Date)
+    clinic_history_id = db.Column(db.Integer, ForeignKey('clinic_history.id'))
     __mapper_args__ = {
         'polymorphic_identity':'patient',
     }
@@ -48,4 +49,19 @@ class MedicalService(db.Model):
     #Este podría ser un Many To Many Field pero agregaría complejidad innecesaria.
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    hospital_id = db.Column(db.Integer, ForeignKey('hospital.id'))
+    hospital_id = db.Column(db.Integer, ForeignKey('hospital_user.id'))
+
+class ClinicHistory(db.Model):
+    __tablename__ = 'clinic_history'
+    id = db.Column(db.Integer, primary_key=True)
+    patient = relationship("PatientUser")
+    registers = relationship("ClinicHistoryRegisters")
+    # treating_doctors = relationship("DoctorUser")
+
+class ClinicHistoryRegisters(db.Model):
+    __tablename__ = 'clinic_history_register'
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date)
+    clinic_history_id = db.Column(db.Integer, ForeignKey('clinic_history.id'))
+    content = db.Column(db.String(500), nullable=False)
+    

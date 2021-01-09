@@ -4,17 +4,17 @@ from flask_restful import Resource, Api
 from flask_sqlalchemy.model import BindMetaMixin, Model
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 
-# Declaro esta metaclase de SqlAlchemy para poder darle nombres custom
+# Declaro esta metaclase de SQLAlchemy para poder darle nombres custom
 # a los usuarios. Esto es útil para hacer la 'herencia' de los tipos de
-# usuario desde el tipo básico. Ref. Doc. SqlAlchemy.
-# La herencia en sqlAlchemy no implica una herencia explícita de clase.
+# usuario desde el tipo básico. Ref. Doc. SQLAlchemy.
+# La herencia en SQLAlchemy no implica una herencia explícita de clase.
 # https://flask-sqlalchemy.palletsprojects.com/en/master/customizing/
 
 
 class NoNameMeta(BindMetaMixin, DeclarativeMeta):
     pass
 
-
+# El objeto db será una instancia de SQLAlchemy con la metaclase custom.
 db = SQLAlchemy(model_class=declarative_base(
     cls=Model, metaclass=NoNameMeta, name='Model'))
 
